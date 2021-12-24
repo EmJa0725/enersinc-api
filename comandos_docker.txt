@@ -1,0 +1,46 @@
+Abrir db docker
+
+docker exec -it  <container-name> psql -U <dataBaseUserName> <dataBaseName>
+
+docker exec -it  django_docker_proyect_db_1 psql -U test_user mydb
+
+SELECT *
+FROM pg_catalog.pg_tables
+WHERE schemaname != 'pg_catalog' AND 
+    schemaname != 'information_schema';
+
+---------------------------------------------------------
+Una vez hecho esto crearemos el proyecto con la siguiente orden, sustituir <nombre-proyecto> por el nombre que le queráis poner.
+
+docker-compose run web django-admin startproject <nombre-proyecto> .
+Para finalizar la construcción del contenedor lanzaremos la ordern build
+
+docker-compose -f docker-compose.yml build
+
+
+Lanzamos de nuevo el build y el up y ya estaría listo.
+
+docker-compose -f docker-compose.yml build
+docker-compose up
+Para comprobar que podemos acceder al admin de Django haremos el makemigrations y migrate para crear las tablas en la base de datos, para ello ahora lo tendremos que lanzar de esta forma:
+
+docker-compose -f .\docker-compose.yml run --rm web python manage.py makemigrations
+docker-compose -f .\docker-compose.yml run --rm web python manage.py migrate
+Y ahora crearemos el super usuario para poder entrar al panel con la siguiente orden:
+
+docker-compose -f .\docker-compose.yml run --rm web python manage.py createsuperuser
+
+
+-------------------------------------------------------------------------------------------
+138
+
+I was facing a similar problem in Django 1.10 and none of the above solutions worked for me.
+
+What eventually worked was running this command:
+
+python manage.py migrate --fake myappname zero
+This reset all migrations (to the zeroth state)
+
+This followed by :
+
+python manage.py migrate myappname

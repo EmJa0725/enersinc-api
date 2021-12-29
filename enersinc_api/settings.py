@@ -55,8 +55,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
-#CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+#CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = ['https://emja0725.github.io/enersinc-front']
 
 ROOT_URLCONF = 'enersinc_api.urls'
 
@@ -95,19 +95,19 @@ WSGI_APPLICATION = 'enersinc_api.wsgi.application'
 #}
 
 # Prod
- DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': BASE_DIR / 'db.sqlite3',
-     }
- }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
- DATABASE_URL = os.environ.get('DATABASE_URL')
- db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
- DATABASES['default'].update(db_from_env)
+DATABASE_URL = os.environ.get('DATABASE_URL')
+db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+DATABASES['default'].update(db_from_env)
 
- Password validation
- https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
+#Password validation
+#https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {

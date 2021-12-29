@@ -15,37 +15,45 @@ def get_persons(request):
         try:
             data = json.loads(serializers.serialize('json', Persona.objects.all().order_by('id')))
             response = {
-                    'data': data ,
-                    'error': False,
-                    'message': 'Se retornan registros de modelo persona' if data else 'No se encontraron registros'
+                    'data': data,
+                    'message': {
+                        'success' : True,
+                        'description': 'Se retornan registros de modelo persona' if data else 'No se encontraron registros'
+                    }           
                 }
             return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
             response = {
-                'error': True,
-                'message': f'Error al modificar los datos: {str(e)}'
+                'message': {
+                    'success': False,
+                    'description': f'Error al modificar los datos: {str(e)}'
+                }
             }
             return JsonResponse(response, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @csrf_exempt 
 def get_single_person(request, id):
-    """Retorna todos los datos del modelo persona"""
+    """Retorna datos de una persona filtrada por id"""
     if request.method == 'GET':
         try:
-            data = json.loads(serializers.serialize('json', Persona.objects.filter(pk=id)))
+            data = json.loads(serializers.serialize('json', Persona.objects.filter(pk=id)))[0]
             print(data)
             response = {
-                    'data': data ,
-                    'error': False,
-                    'message': 'Se retornan datos de persona' if data else 'No se encontraron registros'
+                    'data': data,
+                    'message': {
+                        'success': True,
+                        'description': 'Se retornan datos de persona' if data else 'No se encontraron registros'
+                    }
                 }
             return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
             response = {
-                'error': True,
-                'message': f'Error en busqueda datos persona: {str(e)}'
+                'message': {
+                        'success': False,
+                        'description': f'Error en busqueda datos persona: {str(e)}'
+                } 
             }
             return JsonResponse(response, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -64,15 +72,19 @@ def add_person(request):
                                 )
             new_entry.save()
             response = {
-                    'error': False,
-                    'message': 'Se realiza registro exitosamente'
+                    'message': {
+                        'success': True,
+                        'description': 'Se realiza registro exitosamente'
+                    }
                 }
             return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
             response = {
-                'error': True,
-                'message': f'Error al insertar persona: {str(e)}'
+                'message': {
+                    'success': False,
+                    'description': f'Error al insertar persona: {str(e)}'
+                }
             }
             return JsonResponse(response, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
@@ -91,15 +103,19 @@ def update_person(request, id):
                                 hobbie         = body["data"]["hobbie"]
                                 )                
             response = {
-                    'error': False,
-                    'message': 'Se realiza actualizacion exitosamente'
+                    'message': {
+                        'success': True,
+                        'description': 'Se realiza actualización exitosamente'
+                    }
                 }
             return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
             response = {
-                'error': True,
-                'message': f'Error al editar persona: {str(e)}'
+                'message': {
+                    'success': False,
+                    'description': f'Error al editar persona: {str(e)}'
+                }
             }
             return JsonResponse(response, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -110,15 +126,19 @@ def delete_person(request, id):
         try:
             Persona.objects.filter(id=id).delete()
             response = {
-                    'error': False,
-                    'message': 'Se elimina persona exitosamente'
+                    'message': {
+                        'success': True,
+                        'description': 'Se elimina persona exitosamente'
+                    }
                 }
             return JsonResponse(response, safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
             response = {
-                'error': True,
-                'message': f'Error al eliminar persona: {str(e)}'
+                'message': {
+                    'success': False,
+                    'description': f'Error al eliminar persona: {str(e)}'
+                }
             }
             return JsonResponse(response, safe=False, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
